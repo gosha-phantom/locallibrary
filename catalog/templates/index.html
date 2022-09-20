@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Главная страница</title>
+{% endblock %}
+
+{% block content %}
+    <h3>Главная страница домашней библиотеки</h3>
+    <p>Добро пожаловать в <em>Домашнюю библиотеку</em>, простое приложение, созданное 
+        с помощью фреймворка Django в качестве обучения создания интерактивных веб-сайтов.</p>
+
+
+    <h4>Общая информация по библиотеке</h4>
+    <p>В данный момент библиотека содержит следующее количество записей:</p>
+    <ul>
+        <li><strong>Книги:</strong> {{ num_books }}</li>
+        <li><strong>Копии:</strong> {{ num_instances }}</li>
+        <li><strong>Доступные копии:</strong> {{ num_instances_available }}</li>
+        <li><strong>Авторы:</strong> {{ num_authors }}</li>
+        <li><strong>Количество жанров:</strong> {{ num_genre }}</li>
+        <li><strong>Количество книг фэнтези: </strong> {{ num_genre_books }}</li>
+    </ul>
+
+
+{% endblock %}
