@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Авторизация</title>
+{% endblock %}
+
+{% block content %}
+
+    {% if form.errors %}
+        <p>Логин или пароль указаны неверно. Попробуйте снова.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Ваш аккаунт не имеет доступа к данной странице. Пожалуйста, 
+                войдите под аккаунтом с доступом к данной странице.</p>
+        {% else %}
+            <p>Пожалуйста, войдите в аккаунт, чтобы открыть данную страницу.</p>
+        {% endif %}
+    {% endif %}
+
+    <div class="container">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }}</td>
+                </tr>
+            </table>
+
+            <input type="submit" value="login" />
+            <input type="hidden" name="next" value="{{ next }}" />
+
+            {# если забыли пароль #}
+            <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+        </div>
+    </form>
+
+{% endblock %}

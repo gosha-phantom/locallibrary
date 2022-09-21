@@ -34,8 +34,10 @@ class BookInstanceAdmin(admin.ModelAdmin):
     # отображение данных при отображении всех данных
     list_display = ('book',
                     'get_author_name',
+                    'status',
+                    'borrower',
                     'due_back',
-                    'status')
+                    'id')
     list_filter = ('status', 'due_back')
     # отображение данных при добавлении новой записи
     fieldsets = (
@@ -43,7 +45,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('book', 'imprint', 'id')
         }),
         ('Availability', {
-            'fields': ('status', 'due_back')
+            'fields': ('status', 'due_back', 'borrower')
         })
     )
 

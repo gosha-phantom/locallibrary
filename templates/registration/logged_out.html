@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Деавторизация</title>
+{% endblock %}
+
+{% block content %}
+    <p>Вы были деавторизованы</p>
+    <a href="{% url 'login' %}">Нажмите для повторной авторизации</a>
+{% endblock %}

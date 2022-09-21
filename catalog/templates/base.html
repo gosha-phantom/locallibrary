@@ -23,6 +23,20 @@
                         <li><a href="{% url 'index' %}">Главная страница</a></li>
                         <li><a href="{% url 'books' %}">Все книги</a></li>
                         <li><a href="">Все авторы</a></li>
+                        {%  if user.is_authenticated %}
+                            <hr>
+                            <li>Пользователь: {{ user.get_username }}</li>
+                            <li><a href="{% url 'my-borrowed' %}">Мои книги</a></li>
+                            {# возможность для библиотекарей просматривать книги пользователей #}
+                            {% if perms.app_label.can_mark_returned %}
+                                <li><a href="{% url 'userbooks' %}">Книги пользователей</a></li>
+                            {% endif %}
+                            <br>
+                            <li><a href="{% url 'logout' %}?next={{ request.path }}">Выйти из системы</a></li>
+                            <hr>
+                        {% else %}
+                            <li><a href="{% url 'login' %}?next={{ request.path }}">Авторизация</a></li>
+                        {% endif %}
                     </ul>
                 {% endblock %}
             </div>

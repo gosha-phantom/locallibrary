@@ -1,7 +1,10 @@
+from itertools import permutations
 from pyexpat import model
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 import uuid # Требуется для уникальных экземпляров книг
+from datetime import date
 
 # Create your models here.
 class Genre(models.Model):
@@ -47,9 +50,9 @@ class Book(models.Model):
         return ', '.join([genre.name for genre in self.genre.all()[:3]])
     display_genre.short_description = 'Genre'
 
-    def get_author_name(self):
-        """Достаем имя автора книги"""
-        return '{0} {1}'.format(self.author.first_name, self.author.last_name)
+    # def get_author_name(self):
+    #     """Достаем имя автора книги"""
+    #     return '{0} {1}'.format(self.author.first_name, self.author.last_name)
         
 
 class BookInstance(models.Model):
@@ -60,6 +63,7 @@ class BookInstance(models.Model):
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     LOAN_STATUS = (
         ('m', 'На обслуживании'),
@@ -76,6 +80,7 @@ class BookInstance(models.Model):
     
     class Meta:
         ordering = ['due_back']
+        permissions = [('can_mark_returned', 'Set book as returned')]
     
     def __str__(self) -> str:
         """Текст для презентации модели"""
@@ -83,8 +88,13 @@ class BookInstance(models.Model):
 
     def get_author_name(self):
         """Достаем имя автора книги"""
-        return self.book.get_author_name()
+        return self.book.author
 
+    @property
+    def is_overdue(self):
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
 
 class Author(models.Model):
     """Модель автора книги"""
