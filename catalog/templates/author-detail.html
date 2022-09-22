@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Детализация по автору</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h3>Детализация по автору</h3>
+        <hr>
+        <form action="">
+            <div class="form-group">
+                <label for="firstname" class="col-sm-2 col-form-label">Имя</label>
+                <input type="text" readonly class="form-control" id="firstname" value="{{ author.first_name }}">
+            </div>
+            <div class="form-group">
+                <label for="lastname" class="col-sm-2 col-form-label">Фамилия</label>
+                <input type="text" readonly class="form-control" id="lastname" value="{{ author.last_name }}">
+            </div>
+            {% if author.date_of_birth %}
+                <div class="form-group">
+                    <label for="birthdate" class="col-sm-2 col-form-label">Имя</label>
+                    <input type="text" readonly class="form-control" id="birthdate" value="{{ author.date_of_birth }}">
+                </div>
+            {% endif %}
+            {% if author.date_of_death %}
+                <div class="form-group">
+                    <label for="deathdate" class="col-sm-2 col-form-label">Имя</label>
+                    <input type="text" readonly class="form-control" id="deathdate" value="{{ author.date_of_death }}">
+                </div>
+            {% endif %}
+        </form>
+        <hr>
+        
+        <h4>Список книг автора в библиотеке:</h4>
+        {% if books %}
+            <table class="table">
+                <tr>
+                    <th>Название книги</th>
+                    <th>Краткое описание</th>
+                    <th>ISBN</th>
+                </tr>
+                {% for book in books %}
+                    <tr>
+                        <td><a href="{% url 'book-detail' book.id %}">{{ book.title }}</a></td>
+                        <td>{{ book.summary }}</td>
+                        <td>{{ book.isbn }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>В библиотеке нет книг данного автора.</p>
+        {% endif %}
+    </div>
+{% endblock %}

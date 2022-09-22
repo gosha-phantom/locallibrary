@@ -5,33 +5,37 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Книга: {{ book.title }}</h3>
+    
+    <div class="container">
+        <h3>Книга: {{ book.title }}</h3>
+        <hr>
+        <p><strong>Автор: </strong><a href="">{{ book.author }}</a></p>
+        <p><strong>Описание: </strong>{{ book.summary }}</p>
+        <p><strong>ISBN: </strong>{{ book.isbn }}</p>
+        <p>
+            <strong>Жанр: </strong>
+            {% for genre in book.genre.all %}
+                {{ genre }}
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <hr>
 
-    <p><strong>Автор: </strong><a href="">{{ book.author }}</a></p>
-    <p><strong>Описание: </strong>{{ book.summary }}</p>
-    <p><strong>ISBN: </strong>{{ book.isbn }}</p>
-    <p>
-        <strong>Жанр: </strong>
-        {% for genre in book.jenre.all %}
-            {{ genre }}
-            {% if not forloop.last %}, {% endif %}
-        {% endfor %}
-    </p>
-
-    <div style="margin-left:20px;margin-top:20px;">
-        <h4>Копии книги:</h4>
-        {% for copy in book.bookinstance_set.all %}
-            <hr>
-            <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'd' %}text-danger{% else %}text-warning{% endif %}">
-                {{ copy.get_status_display }}
-            </p>
-            {% if copy.status != 'a' %}
-                <p><strong>Ожидают возвращения:</strong>
-                    {{ copy.due_back }}
+        <div style="margin-left:20px;margin-top:20px;">
+            <h4>Копии книги:</h4>
+            {% for copy in book.bookinstance_set.all %}
+                <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'd' %}text-danger{% else %}text-warning{% endif %}">
+                    {{ copy.get_status_display }}
                 </p>
-            {% endif %}
-            <p><strong>Типография:</strong> {{ copy.imprint }}</p>
-            <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
-        {% endfor %}
+                {% if copy.status != 'a' %}
+                    <p><strong>Ожидают возвращения:</strong>
+                        {{ copy.due_back }}
+                    </p>
+                {% endif %}
+                <p><strong>Типография:</strong> {{ copy.imprint }}</p>
+                <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+                <hr>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

@@ -17,6 +17,9 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 # импортируем модуль работы с датами и временем
 import datetime
+# импортируем все для отображений авторов
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -133,3 +136,72 @@ def renew_book_librariran(request, pk):
     return render(request, 'book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
 
 
+class AuthorCreate(CreateView):
+    model = Author
+    fields = '__all__'
+    # initial = {'date_of_death': '12/10/2016'}
+
+class AuthorCreateView(PermissionRequiredMixin, AuthorCreate):
+    permission_required = 'can_create_author'
+
+
+class AuthorUpdate(UpdateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+
+class AuthorUpdateView(PermissionRequiredMixin, AuthorUpdate):
+    permission_required = 'can_create_author'
+
+
+class AuthorDelete(DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors') # ленивый аналог HttpResponseRedirect(reverse('authors'))
+
+class AuthorDeleteView(PermissionRequiredMixin, AuthorDelete):
+    permission_required = 'can_create_author'
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    # определение нового имени шаблона для вывода информации
+    template_name = 'authors.html'
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+    # определение нового имени шаблона для вывода информации
+    template_name = 'author-detail.html'
+
+    # добавляем в контекст информацию по книгам автора
+    def get_context_data(self, **kwargs):
+        # достаем ключ из урла
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        # достаем текущий контекст
+        context = super().get_context_data(**kwargs)
+        # добавляем данные в контекст
+        context['books'] = Book.objects.all().filter(author_id=pk)
+        # возвращаем контекст
+        return context
+
+
+class BookCreate(CreateView):
+    model = Book
+    fields = '__all__'
+
+class BookCreateView(PermissionRequiredMixin, BookCreate):
+    permission_required = 'can_create_book'
+
+
+class BookUpdate(UpdateView):
+    model = Book
+    fields = ['title', 'author', 'summary', 'isbn', 'genre']
+
+class BookUpdateView(PermissionRequiredMixin, BookUpdate):
+    permission_required = 'can_create_book'
+
+
+class BookDelete(DeleteView):
+    model = Book
+    success_url = reverse_lazy('books') # ленивый аналог HttpResponseRedirect(reverse('authors'))
+
+class BookDeleteView(PermissionRequiredMixin, BookDelete):
+    permission_required = 'can_create_book'

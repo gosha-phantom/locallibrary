@@ -50,6 +50,10 @@ class Book(models.Model):
         return ', '.join([genre.name for genre in self.genre.all()[:3]])
     display_genre.short_description = 'Genre'
 
+    class Meta:
+        permissions = [('can_create_book', 'Can create/update/delete book')]
+
+
     # def get_author_name(self):
     #     """Достаем имя автора книги"""
     #     return '{0} {1}'.format(self.author.first_name, self.author.last_name)
@@ -111,3 +115,6 @@ class Author(models.Model):
     def __str__(self) -> str:
         """Текст для презентации модели"""
         return '{0}, {1}'.format(self.last_name, self.first_name)
+
+    class Meta:
+        permissions = [('can_create_author', 'Can create/update/delte author')]

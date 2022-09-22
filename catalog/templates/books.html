@@ -8,13 +8,26 @@
     <h3>Список книг</h3>
 
     {% if book_list %}
-        <ul>
+        <table class="table">
+            <tr>
+                <th>Название книги</th>
+                <th>Автор</th>
+                {% if perms.app_label.can_create_book %}
+                    <th>Изменить книгу</th>
+                    <th>Удалить книгу</th>
+                {% endif %}  
+            </tr>
             {% for book in book_list %}
-                <li>
-                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{ book.author }})
-                </li>
+                <tr>
+                    <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                    <td><a href="{% url 'author-detail' book.author.id %}"></a>{{ book.author }}</td>
+                    {% if perms.app_label.can_create_book %}
+                        <td><a href="{% url 'book_update' book.id %}">Изменить данные по книге</a></td>
+                        <td><a href="{% url 'book_delete' book.id %}">Удалить книгу</a></td>
+                    {% endif %}
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
     {% else %}
         <p>В библиотеке нет книг.</p>
     {% endif %}
