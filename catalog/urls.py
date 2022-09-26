@@ -8,7 +8,7 @@ urlpatterns = [
     re_path(r'^mybooks/$', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
     re_path(r'^userbooks/$', views.LoanedBooksByUserForLibrarian.as_view(), name='userbooks'),
     # страница для обновления данных по отданным книгам
-    re_path(r'^book/(?P<pk>[-\w]+)/$', views.renew_book_librariran, name='renew-book-librariran'),
+    re_path(r'^book/(?P<pk>[-\w]+)/$', views.renew_book_librariran, name='renew-book-librarian'),
     # страницы по созданию/изменению/удалению авторов
     re_path(r'^author/create/$', views.AuthorCreateView.as_view(), name='author_create'),
     re_path(r'^author/(?P<pk>\d+)/update/$', views.AuthorUpdateView.as_view(), name='author_update'),

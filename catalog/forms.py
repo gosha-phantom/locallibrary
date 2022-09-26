@@ -20,7 +20,7 @@ class RenewBookForm(forms.Form):
         
         # проверка того, что дата не выходит за верхнюю границу
         if data > datetime.date.today() + datetime.timedelta(weeks=4):
-            raise ValidationError(ul('Невернаяя дата - она находится позже допустимых 4-ех недель.'))
+            raise ValidationError(ul('Неверная дата - она находится позже допустимых 4-ех недель.'))
 
         # возвращаем "очищенные" данные
         return data
